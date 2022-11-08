@@ -21,3 +21,9 @@ class PostListView(generics.ListAPIView):
             queryset =queryset.filter(user__username__icontains=q)
         
         return queryset
+
+class PostDetailView(generics.RetrieveAPIView):
+    serializer_class = PostsSerializer
+
+class PostDeleteView(generics.DestroyAPIView):
+    serializer_class = PostsSerializer
