@@ -11,7 +11,8 @@ class Posts(models.Model):
 
     @property
     def likes(self):
-        return len([1, 2])
+        count = trackLikes.objects.filter(post=self).count()
+        return count
     
     @property
     def comments(self):
@@ -19,3 +20,10 @@ class Posts(models.Model):
 
     def __str__(self):
         return self.text    
+
+class trackLikes(models.Model):
+    user = models.ForeignKey(User, models.CASCADE, default=1)
+    post = models.ForeignKey(Posts, models.CASCADE, default=1)
+    class Meta:
+       unique_together = ("user", "post")
+

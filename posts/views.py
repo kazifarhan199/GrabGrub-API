@@ -1,5 +1,5 @@
 
-from .serializers import PostsSerializer
+from .serializers import LikesSerializer, PostsSerializer
 from .models import Posts
 from rest_framework import generics
 
@@ -29,3 +29,6 @@ class PostDetailView(generics.RetrieveAPIView):
 class PostDeleteView(generics.DestroyAPIView):
     serializer_class = PostsSerializer
     queryset= Posts.objects.all()
+
+class LikeCreateView(generics.CreateAPIView):
+    serializer_class = LikesSerializer
