@@ -23,7 +23,7 @@ class Posts(models.Model):
 
 class trackLikes(models.Model):
     user = models.ForeignKey(User, models.CASCADE, default=1)
-    post = models.ForeignKey(Posts, models.CASCADE, default=1)
+    post = models.ForeignKey(Posts, models.CASCADE)
     class Meta:
        unique_together = ("user", "post")
 

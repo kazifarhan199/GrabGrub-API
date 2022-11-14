@@ -14,17 +14,17 @@ class PostsSerializer(serializers.ModelSerializer):
 
 
 class LikesSerializer(serializers.ModelSerializer):
-    user_id = serializers.SerializerMethodField()
-
-    def get_user_id(self, obj):
-        return obj.user.id
-    
-    post_id = serializers.SerializerMethodField()
-
-    def get_post_id(self, obj):
-        return obj.user.id
 
     class Meta:
         model = trackLikes
-        fields = ['user_id', "post_id"]
+        fields = ['user', "post"]
+
+    def validate(self, data):
+        if trackLikes.objects.filter(user=self.context['request'].user, post=data['post']).exists():
+            raise serializers.ValidationError("You have already a placed like on this post")
+        return data
+    
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
     
