@@ -13,7 +13,10 @@ class MessageListView(generics.ListAPIView):
     serializer_class = MessageSerializer
 
     def get_queryset(self):
-        queryset = Message.objects.all().order_by('-id')
+        queryset1 = Message.objects.filter(to=self.kwargs['to'], user=self.request.user)
+        queryset2 = Message.objects.filter(to=self.request.user, user=self.kwargs['to'])
+        queryset = queryset1 | queryset2
+        queryset = queryset.order_by('-id')
         
         u = self.request.query_params.get('u', None)
         if u is not None:
