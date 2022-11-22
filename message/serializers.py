@@ -1,5 +1,5 @@
 from rest_framework import serializers 
-from .models import Message
+from .models import Message, Conversation
 
 class MessageSerializer(serializers.ModelSerializer):
     user_username = serializers.SerializerMethodField()
@@ -22,10 +22,6 @@ class MessageSerializer(serializers.ModelSerializer):
     def get_to_username(self, obj):
         return obj.to.username
 
-    def create(self, validated_data):
-        validated_data['user'] = self.context['request'].user
-        return super().create(validated_data)
-
     class Meta:
         model = Message
         fields = "__all__"
@@ -39,3 +35,22 @@ class MessageSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
         return super().create(validated_data)
+
+
+class ConversationSerializer(serializers.ModelSerializer):
+    user_username = serializers.SerializerMethodField()
+    to_username = serializers.SerializerMethodField()
+    user = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Conversation
+        fields = "__all__"
+
+    def get_user(self, obj):
+        return obj.user.id
+
+    def get_user_username(self, obj):
+        return obj.user.username
+
+    def get_to_username(self, obj):
+        return obj.to.username

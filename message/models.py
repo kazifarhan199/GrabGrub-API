@@ -15,3 +15,22 @@ class Message(models.Model):
 
     def __str__(self):
         return self.user.username + ' -> ' + self.to.username
+
+class Conversation(models.Model):
+    user = models.ForeignKey(User, models.CASCADE)
+    to = models.ForeignKey(User, models.CASCADE, related_name='cto')
+
+    class Meta:
+        unique_together = ('user', 'to')
+
+    def __str__(self):
+        return self.user.username + ' -> ' + self.to.username
+
+from django.db.models.signals import post_save
+
+def createConversation(sender, instance, **kwargs):
+    Conversation.objects.get_or_create(user=instance.user, to=instance.to)
+    Conversation.objects.get_or_create(user=instance.to, to=instance.user)
+
+
+post_save.connect(createConversation, sender=Message)

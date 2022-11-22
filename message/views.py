@@ -1,5 +1,5 @@
-from .serializers import MessageSerializer
-from .models import Message
+from .serializers import MessageSerializer, ConversationSerializer
+from .models import Message, Conversation
 from rest_framework import generics
 from django.contrib.auth import get_user_model
 
@@ -27,3 +27,9 @@ class MessageListView(generics.ListAPIView):
             queryset =queryset.filter(text__icontains=q)
         
         return queryset
+
+class ConversationListView(generics.ListAPIView):
+    serializer_class = ConversationSerializer
+
+    def get_queryset(self):
+        return Conversation.objects.filter(user=self.request.user)
