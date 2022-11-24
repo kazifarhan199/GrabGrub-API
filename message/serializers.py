@@ -4,7 +4,9 @@ from .models import Message, Conversation
 class MessageSerializer(serializers.ModelSerializer):
     user_username = serializers.SerializerMethodField()
     to_username = serializers.SerializerMethodField()
+    to_email = serializers.SerializerMethodField()
     post_image = serializers.SerializerMethodField()
+    post_text = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
     user_image = serializers.SerializerMethodField()
     to_image = serializers.SerializerMethodField()
@@ -18,11 +20,20 @@ class MessageSerializer(serializers.ModelSerializer):
         else:
             return ''
 
+    def get_post_text(self, obj):
+        if obj.post:
+            return obj.post.text
+        else:
+            return ''
+
     def get_user_username(self, obj):
         return obj.user.username
 
     def get_to_username(self, obj):
         return obj.to.username
+
+    def get_to_email(self, obj):
+        return obj.to.email
 
     class Meta:
         model = Message
@@ -46,16 +57,21 @@ class MessageSerializer(serializers.ModelSerializer):
         return self.context['request'].build_absolute_uri(obj.user.image)
 
 
+
 class ConversationSerializer(serializers.ModelSerializer):
     user_username = serializers.SerializerMethodField()
     to_username = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
     user_image = serializers.SerializerMethodField()
     to_image = serializers.SerializerMethodField()
+    to_email = serializers.SerializerMethodField()
 
     class Meta:
         model = Conversation
         fields = "__all__"
+
+    def get_to_email(self, obj):
+        return obj.to.email
 
     def get_user(self, obj):
         return obj.user.id
