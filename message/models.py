@@ -29,8 +29,11 @@ class Conversation(models.Model):
 from django.db.models.signals import post_save
 
 def createConversation(sender, instance, **kwargs):
-    Conversation.objects.get_or_create(user=instance.user, to=instance.to)
-    Conversation.objects.get_or_create(user=instance.to, to=instance.user)
+    if (instance.user != instance.to):
+        [i.delete() for i in Conversation.objects.filter(user=instance.user, to=instance.to)]
+        Conversation.objects.create(user=instance.user, to=instance.to)
+    [i.delete() for i in Conversation.objects.filter(user=instance.to, to=instance.user)]
+    Conversation.objects.create(user=instance.to, to=instance.user)
 
 
 post_save.connect(createConversation, sender=Message)
