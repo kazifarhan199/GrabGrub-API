@@ -1,8 +1,9 @@
-from rest_framework.authtoken.views import ObtainAuthToken
 from django.urls import path
-from .views import Register, Login
+from . import views
 
-urlpatterns=[
-    path('login/', Login.as_view()),
-    path('register/', Register.as_view()),
+urlpatterns = [
+    path('register/', views.Register.as_view(), name='register'),
+    path('login/', views.Login.as_view(), name='login'),
+    path('profile/<pk>/', views.Profile.as_view(), name='profile'),
+    path('profile-edit/', views.ProfileEdit.as_view(), name='profile-edit'),
 ]

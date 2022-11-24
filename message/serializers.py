@@ -6,7 +6,9 @@ class MessageSerializer(serializers.ModelSerializer):
     to_username = serializers.SerializerMethodField()
     post_image = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
-
+    user_image = serializers.SerializerMethodField()
+    to_image = serializers.SerializerMethodField()
+    
     def get_user(self, obj):
         return obj.user.id
 
@@ -37,10 +39,19 @@ class MessageSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
+    def get_to_image(self, obj):
+        return self.context['request'].build_absolute_uri(obj.to.image)
+
+    def get_user_image(self, obj):
+        return self.context['request'].build_absolute_uri(obj.user.image)
+
+
 class ConversationSerializer(serializers.ModelSerializer):
     user_username = serializers.SerializerMethodField()
     to_username = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
+    user_image = serializers.SerializerMethodField()
+    to_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Conversation
@@ -54,3 +65,9 @@ class ConversationSerializer(serializers.ModelSerializer):
 
     def get_to_username(self, obj):
         return obj.to.username
+
+    def get_to_image(self, obj):
+        return self.context['request'].build_absolute_uri(obj.to.image)
+
+    def get_user_image(self, obj):
+        return self.context['request'].build_absolute_uri(obj.user.image)
