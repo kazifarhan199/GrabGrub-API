@@ -14,7 +14,7 @@ class PostListView(generics.ListAPIView):
         
         q = self.request.query_params.get('q', None)
         if q is not None:
-            queryset =queryset.filter(text__icontains=q)
+            queryset =queryset.filter(title__icontains=q)
 
         q = self.request.query_params.get('u', None)
         if q is not None:

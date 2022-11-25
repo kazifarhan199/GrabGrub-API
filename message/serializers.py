@@ -22,7 +22,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
     def get_post_text(self, obj):
         if obj.post:
-            return obj.post.text
+            return obj.post.title
         else:
             return ''
 

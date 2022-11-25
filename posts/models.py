@@ -7,6 +7,7 @@ User = get_user_model()
 class Posts(models.Model):
     text = models.TextField()
     image = models.ImageField()
+    title = models.CharField(max_length=500)
     user = models.ForeignKey(User, models.CASCADE, default=1)
     date = models.DateField(auto_now=True)
 
@@ -20,7 +21,7 @@ class Posts(models.Model):
         return len([1, 2])
 
     def __str__(self):
-        return self.text    
+        return self.title    
 
 class trackLikes(models.Model):
     user = models.ForeignKey(User, models.CASCADE, default=1)
