@@ -8,6 +8,7 @@ class Posts(models.Model):
     text = models.TextField()
     image = models.ImageField()
     user = models.ForeignKey(User, models.CASCADE, default=1)
+    date = models.DateField(auto_now=True)
 
     @property
     def likes(self):
