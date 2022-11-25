@@ -65,6 +65,7 @@ class ConversationSerializer(serializers.ModelSerializer):
     user_image = serializers.SerializerMethodField()
     to_image = serializers.SerializerMethodField()
     to_email = serializers.SerializerMethodField()
+    bio = serializers.SerializerMethodField()
 
     class Meta:
         model = Conversation
@@ -72,6 +73,9 @@ class ConversationSerializer(serializers.ModelSerializer):
 
     def get_to_email(self, obj):
         return obj.to.email
+
+    def get_bio(self, obj):
+        return obj.to.bio
 
     def get_user(self, obj):
         return obj.user.id
