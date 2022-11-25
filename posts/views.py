@@ -3,6 +3,9 @@ from .serializers import LikesSerializer, PostsSerializer
 from .models import Posts, trackLikes
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class PostCreateView(generics.CreateAPIView):
     serializer_class = PostsSerializer
@@ -13,13 +16,23 @@ class PostListView(generics.ListAPIView):
     def get_queryset(self):
         queryset = Posts.objects.all().order_by('-id')
         
+        l = self.request.query_params.get('l', None)
+        if l is not None:
+            u = self.request.query_params.get('u', None)
+            if u is not None:
+                user = get_object_or_404(User.objects.all(), username=u)
+                t = [t.post for t in trackLikes.objects.filter(user=user)]
+                queryset = t
+        
+        else:
+            u = self.request.query_params.get('u', None)
+            if u is not None:
+                queryset =queryset.filter(user__username__iexact=u)
+        
         q = self.request.query_params.get('q', None)
         if q is not None:
             queryset =queryset.filter(title__icontains=q)
 
-        q = self.request.query_params.get('u', None)
-        if q is not None:
-            queryset =queryset.filter(user__username__iexact=q)
         
         return queryset
 
