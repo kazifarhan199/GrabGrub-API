@@ -11,7 +11,7 @@ User = get_user_model()
 class Register(CreateAPIView):
     model = User
     permission_classes = [permissions.AllowAny]
-    serializer_class = serializers.UserSerializer
+    serializer_class = serializers.UserRegisterSerializer
 
 class Login(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
