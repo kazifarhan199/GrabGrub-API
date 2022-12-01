@@ -10,6 +10,7 @@ class Posts(models.Model):
     title = models.CharField(max_length=500)
     user = models.ForeignKey(User, models.CASCADE, default=1)
     date = models.DateField(auto_now=True)
+    servings = models.IntegerField()
 
     @property
     def likes(self):
