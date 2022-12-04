@@ -53,3 +53,8 @@ class ConversationListView(generics.ListAPIView):
 
     def get_queryset(self):
         return Conversation.objects.filter(user=self.request.user)
+
+class MessageDeleteView(generics.DestroyAPIView):
+    
+    def get_queryset(self):
+        return Message.objects.filter(user=self.request.user)
