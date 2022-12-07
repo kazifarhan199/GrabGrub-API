@@ -8,4 +8,6 @@ urlpatterns = [
     path('delete/<pk>/', views.PostDeleteView.as_view()),
     path('like/add/', views.LikeCreateView.as_view()),
     path('like/remove/<post>/', views.LikeDeleteView.as_view()),
+    path('claim/add/', views.ClaimCreateView.as_view()),
+    path('claim/', views.ClaimListView.as_view()),
 ]

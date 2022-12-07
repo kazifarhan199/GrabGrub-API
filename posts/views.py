@@ -1,6 +1,6 @@
 
-from .serializers import LikesSerializer, PostsSerializer
-from .models import Posts, trackLikes
+from .serializers import LikesSerializer, PostsSerializer, ClaimSerializer
+from .models import Posts, trackLikes, Claim
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
@@ -55,3 +55,12 @@ class LikeDeleteView(generics.DestroyAPIView):
     def get_object(self):
         queryset = self.get_queryset()
         return get_object_or_404(queryset, post=self.kwargs['post'])
+
+class ClaimCreateView(generics.CreateAPIView):
+    serializer_class = ClaimSerializer
+
+class ClaimListView(generics.ListAPIView):
+    serializer_class = ClaimSerializer
+
+    def get_queryset(self):
+        return Claim.objects.filter(user=self.request.user).order_by("-id")

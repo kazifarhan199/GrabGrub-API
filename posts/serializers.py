@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Posts, trackLikes
+from .models import Posts, trackLikes, Claim
 
 class PostsSerializer(serializers.ModelSerializer):
     user_username = serializers.SerializerMethodField()
@@ -39,3 +39,23 @@ class LikesSerializer(serializers.ModelSerializer):
         validated_data['user'] = self.context['request'].user
         return super().create(validated_data)
     
+class ClaimSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+    text = serializers.SerializerMethodField()
+
+    def get_text(self, obj):
+        return obj.post.text
+        
+    def get_image(self, obj):
+        return self.context['request'].build_absolute_uri(obj.post.image.url)
+        
+    class Meta:
+        model = Claim
+        fields = ["id", "post", "image", "quantity", "user", "text"]
+
+    def validate(self, attrs):
+        if self.context['request'].user!=attrs['user']:
+             raise serializers.ValidationError("Please login")
+        if attrs['post'].servings < attrs['quantity']:
+             raise serializers.ValidationError("Not enough quantity to claim")
+        return super().validate(attrs)
